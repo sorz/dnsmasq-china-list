@@ -20,5 +20,10 @@ bind: raw
 	sed -e 's|\(.*\)|zone "\1." {type forward; forwarders { $(SERVER); }; };|' google.china.raw.txt > google.china.bind.conf
 	sed -e 's|\(.*\)|zone "\1." {type forward; forwarders { $(SERVER); }; };|' apple.china.raw.txt > apple.china.bind.conf
 
+autoproxy: raw
+	{ echo '[AutoProxy 0.2.9]'; sed -e 's|\(.*\)|\|\|\1|' accelerated-domains.china.raw.txt; } | base64 > accelerated-domains.china.autoproxy.conf
+	{ echo '[AutoProxy 0.2.9]'; sed -e 's|\(.*\)|\|\|\1|' google.china.raw.txt; } | base64 > google.china.autoproxy.conf
+	{ echo '[AutoProxy 0.2.9]'; sed -e 's|\(.*\)|\|\|\1|' apple.china.raw.txt; } | base64 > apple.china.autoproxy.conf
+
 clean:
-	rm -f {accelerated-domains,google,apple}.china.{dnsmasq,unbound,bind}.conf {accelerated-domains,google,apple}.china.raw.txt
+	rm -f {accelerated-domains,google,apple}.china.{dnsmasq,unbound,bind,autoproxy}.conf {accelerated-domains,google,apple}.china.raw.txt
